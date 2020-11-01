@@ -17,3 +17,8 @@
   color: maroon;
   background-color: brown;
 }
+.gamePacman::before {
+  content: 'ᗤ';
+  color: yellow;
+  z-index: 1;
+}

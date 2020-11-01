@@ -22,12 +22,6 @@ const Game = () => {
   const [pacmanMovingDirection, setPacmanMovingDirection] = useState('left');
 
   useEffect(() => {
-    let x = mapScreen;
-    x[pacmanPosition.r][pacmanPosition.c] = symbols.empty;
-    setMapScreen(x);
-  }, [pacmanPosition]);
-
-  useEffect(() => {
     if (keyPressed === 'w' || keyPressed === 'arrowup') {
       setPacmanMovingDirection('up');
     } else if (keyPressed === 's' || keyPressed === 'arrowdown') {
@@ -40,26 +34,50 @@ const Game = () => {
   }, [keyPressed]);
 
   useEffect(() => {
-    if (pacmanMovingDirection === 'up') {
-      setPacmanPosition({r: pacmanPosition.r - 1, c: pacmanPosition.c});
-    } else if (pacmanMovingDirection === 'down') {
-      setPacmanPosition({r: pacmanPosition.r + 1, c: pacmanPosition.c});
-    } else if (pacmanMovingDirection === 'right') {
-      setPacmanPosition({r: pacmanPosition.r, c: pacmanPosition.c + 1});
-    } else if (pacmanMovingDirection === 'left') {
-      setPacmanPosition({r: pacmanPosition.r, c: pacmanPosition.c - 1});
+    const interval = setInterval(() => {
+      if (pacmanMovingDirection === 'up') {
+        setPacmanPosition({r: pacmanPosition.r - 1, c: pacmanPosition.c});
+      } else if (pacmanMovingDirection === 'down') {
+        setPacmanPosition({r: pacmanPosition.r + 1, c: pacmanPosition.c});
+      } else if (pacmanMovingDirection === 'right') {
+        setPacmanPosition({r: pacmanPosition.r, c: pacmanPosition.c + 1});
+      } else if (pacmanMovingDirection === 'left') {
+        setPacmanPosition({r: pacmanPosition.r, c: pacmanPosition.c - 1});
+      } else {
+      }
+    }, 250);
+    return () => {
+      clearInterval(interval);
+    };
+  }, [pacmanPosition]);
+
+  useEffect(() => {
+    let x = mapScreen;
+    if (x[pacmanPosition.r][pacmanPosition.c] === symbols.wall) {
+      setPacmanMovingDirection('');
+    } else {
+      x[pacmanPosition.r][pacmanPosition.c] = symbols.empty;
+      setMapScreen(x);
     }
-  }, [pacmanMovingDirection]);
+  }, [pacmanPosition]);
 
   console.log(pacmanPosition);
 
   return (
     <div>
       <div className="gameScreenContainer">
-        {mapScreen.map(row => (
-          <div className="gameScreenRow">
-            {row.map(cell => (
-              <div className={`gameScreenCell ${cell === symbols.wall && 'gameWall'}`}>{cell}</div>
+        {mapScreen.map((row, i) => (
+          <div key={i} className="gameScreenRow">
+            {row.map((cell, j) => (
+              <div
+                key={j}
+                className={`gameScreenCell ${
+                  cell === symbols.wall
+                    ? 'gameWall'
+                    : i === pacmanPosition.r && j === pacmanPosition.c && 'gamePacman'
+                }`}>
+                {{r: i, c: j} !== pacmanPosition ? cell : symbols.pacman}
+              </div>
             ))}
           </div>
         ))}
