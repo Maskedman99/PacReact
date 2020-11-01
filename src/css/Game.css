@@ -11,6 +11,7 @@
   padding: 6px 4px;
   min-width: 16px;
   text-align: center;
+  overflow: hidden;
   vertical-align: middle;
 }
 .gameWall {

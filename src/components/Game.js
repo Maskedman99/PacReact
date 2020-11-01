@@ -18,6 +18,7 @@ const Game = () => {
   const keyPressed = useKeyPressed();
 
   const [mapScreen, setMapScreen] = useState(createInitialMap(symbols));
+  const [pacmanNextPosition, setPacmanNextPosition] = useState({r: 9, c: 24});
   const [pacmanPosition, setPacmanPosition] = useState({r: 9, c: 24});
   const [pacmanMovingDirection, setPacmanMovingDirection] = useState('left');
 
@@ -36,26 +37,26 @@ const Game = () => {
   useEffect(() => {
     const interval = setInterval(() => {
       if (pacmanMovingDirection === 'up') {
-        setPacmanPosition({r: pacmanPosition.r - 1, c: pacmanPosition.c});
+        setPacmanNextPosition({r: pacmanPosition.r - 1, c: pacmanPosition.c});
       } else if (pacmanMovingDirection === 'down') {
-        setPacmanPosition({r: pacmanPosition.r + 1, c: pacmanPosition.c});
+        setPacmanNextPosition({r: pacmanPosition.r + 1, c: pacmanPosition.c});
       } else if (pacmanMovingDirection === 'right') {
-        setPacmanPosition({r: pacmanPosition.r, c: pacmanPosition.c + 1});
+        setPacmanNextPosition({r: pacmanPosition.r, c: pacmanPosition.c + 1});
       } else if (pacmanMovingDirection === 'left') {
-        setPacmanPosition({r: pacmanPosition.r, c: pacmanPosition.c - 1});
-      } else {
+        setPacmanNextPosition({r: pacmanPosition.r, c: pacmanPosition.c - 1});
       }
-    }, 250);
+      if (mapScreen[pacmanNextPosition.r][pacmanNextPosition.c] !== symbols.wall) {
+        setPacmanPosition(pacmanNextPosition);
+      }
+    }, 125);
     return () => {
       clearInterval(interval);
     };
-  }, [pacmanPosition]);
+  }, [pacmanPosition, pacmanMovingDirection]);
 
   useEffect(() => {
-    let x = mapScreen;
-    if (x[pacmanPosition.r][pacmanPosition.c] === symbols.wall) {
-      setPacmanMovingDirection('');
-    } else {
+    if (mapScreen[pacmanPosition.r][pacmanPosition.c] === symbols.dot) {
+      let x = mapScreen;
       x[pacmanPosition.r][pacmanPosition.c] = symbols.empty;
       setMapScreen(x);
     }
