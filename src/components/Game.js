@@ -11,13 +11,14 @@ const Game = () => {
     empty: ' ',
     wall: '█',
     dot: '●',
-    pacman: 'ᗤ',
-    ghost: 'ᗣ'
+    pacman: 'c',
+    ghost: '9'
   };
 
   const keyPressed = useKeyPressed();
 
   const [mapScreen, setMapScreen] = useState(createInitialMap(symbols));
+  const [ghostPosition, setGhostPosition] = useState({r: 1, c: 1});
   const [pacmanPosition, setPacmanPosition] = useState({r: 9, c: 24});
   const [pacmanMovingDirection, setPacmanMovingDirection] = useState('left');
 
@@ -62,26 +63,48 @@ const Game = () => {
     }
   }, [pacmanPosition]);
 
-  console.log(pacmanPosition);
+  useEffect(() => {
+    const interval = setInterval(() => {
+      let ghostNextPosition = ghostPosition;
+      let ghostRandom = Math.floor(Math.random() * 4);
+      if (ghostRandom === 0) {
+        ghostNextPosition = {r: ghostPosition.r - 1, c: ghostPosition.c};
+      } else if (ghostRandom === 1) {
+        ghostNextPosition = {r: ghostPosition.r + 1, c: ghostPosition.c};
+      } else if (ghostRandom === 2) {
+        ghostNextPosition = {r: ghostPosition.r, c: ghostPosition.c + 1};
+      } else {
+        ghostNextPosition = {r: ghostPosition.r, c: ghostPosition.c - 1};
+      }
+      if (mapScreen[ghostNextPosition.r][ghostNextPosition.c] !== symbols.wall) {
+        setGhostPosition(ghostNextPosition);
+      }
+    }, 125);
+    return () => {
+      clearInterval(interval);
+    };
+  }, [ghostPosition]);
 
   return (
     <div>
       <div className="gameScreenContainer">
         {mapScreen.map((row, i) => (
           <div key={i} className="gameScreenRow">
-            {row.map((cell, j) => (
-              <div
-                key={j}
-                className={`gameScreenCell ${
-                  cell === symbols.wall
-                    ? 'gameWall'
-                    : i === pacmanPosition.r &&
-                      j === pacmanPosition.c &&
-                      'gamePacman pacman'+ pacmanMovingDirection
-                }`}>
-                {i !== pacmanPosition.r || j !== pacmanPosition.c ? cell : symbols.pacman}
-              </div>
-            ))}
+            {row.map((cell, j) =>
+              i === ghostPosition.r && j === ghostPosition.c ? (
+                <div key={j} className="gameScreenCell gameGhost">
+                  {symbols.ghost}
+                </div>
+              ) : i === pacmanPosition.r && j === pacmanPosition.c ? (
+                <div key={j} className={`gameScreenCell gamePacman pacman${pacmanMovingDirection}`}>
+                  {symbols.pacman}
+                </div>
+              ) : (
+                <div key={j} className={`gameScreenCell ${cell === symbols.wall && 'gameWall'}`}>
+                  {cell}
+                </div>
+              )
+            )}
           </div>
         ))}
       </div>

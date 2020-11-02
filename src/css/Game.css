@@ -1,5 +1,6 @@
 .gameScreenContainer {
   display: table;
+  cursor: default;
   font-size: 14px;
   font-family: 'Courier New', Courier, monospace;
 }
@@ -10,7 +11,6 @@
   display: table-cell;
   padding: 6px 4px;
   min-width: 16px;
-  /*border: 0.5px solid white;*/
   text-align: center;
   vertical-align: middle;
 }
@@ -20,17 +20,27 @@
 }
 .gamePacman {
   padding: 0;
+  font-family: 'pac-font';
   font-size: 22px;
   font-weight: bold;
-  font-optical-sizing: auto;
   color: yellow;
 }
-.pacmanup {
+.pacmandown {
   transform: rotateZ(90deg);
 }
-.pacmandown {
+.pacmanup {
   transform: rotateZ(270deg);
 }
-.pacmanright {
+.pacmanleft {
   transform: rotateZ(180deg);
+}
+.pacmanright {
+  transform: rotateX(180deg);
+}
+.gameGhost {
+  padding: 0;
+  font-family: 'pac-font';
+  font-size: 22px;
+  font-weight: bold;
+  color: violet;
 }
