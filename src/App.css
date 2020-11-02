@@ -1,6 +1,17 @@
 .App {
   background-color: black;
   color: white;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
   height: 100vh;
   width: 100vw;
+}
+.appTitle {
+  font-family: 'pac-font';
+  font-weight: bold;
+  font-size: 34px;
+  text-align: center;
+  padding: 12px;
 }

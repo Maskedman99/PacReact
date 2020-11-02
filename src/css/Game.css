@@ -1,6 +1,6 @@
 .gameScreenContainer {
   display: table;
-  cursor: default;
+  cursor: none;
   font-size: 14px;
   font-family: 'Courier New', Courier, monospace;
 }
