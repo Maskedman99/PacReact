@@ -18,7 +18,6 @@ const Game = () => {
   const keyPressed = useKeyPressed();
 
   const [mapScreen, setMapScreen] = useState(createInitialMap(symbols));
-  const [pacmanNextPosition, setPacmanNextPosition] = useState({r: 9, c: 24});
   const [pacmanPosition, setPacmanPosition] = useState({r: 9, c: 24});
   const [pacmanMovingDirection, setPacmanMovingDirection] = useState('left');
 
@@ -36,14 +35,15 @@ const Game = () => {
 
   useEffect(() => {
     const interval = setInterval(() => {
+      let pacmanNextPosition = {r: 0, c: 0};
       if (pacmanMovingDirection === 'up') {
-        setPacmanNextPosition({r: pacmanPosition.r - 1, c: pacmanPosition.c});
+        pacmanNextPosition = {r: pacmanPosition.r - 1, c: pacmanPosition.c};
       } else if (pacmanMovingDirection === 'down') {
-        setPacmanNextPosition({r: pacmanPosition.r + 1, c: pacmanPosition.c});
+        pacmanNextPosition = {r: pacmanPosition.r + 1, c: pacmanPosition.c};
       } else if (pacmanMovingDirection === 'right') {
-        setPacmanNextPosition({r: pacmanPosition.r, c: pacmanPosition.c + 1});
+        pacmanNextPosition = {r: pacmanPosition.r, c: pacmanPosition.c + 1};
       } else if (pacmanMovingDirection === 'left') {
-        setPacmanNextPosition({r: pacmanPosition.r, c: pacmanPosition.c - 1});
+        pacmanNextPosition = {r: pacmanPosition.r, c: pacmanPosition.c - 1};
       }
       if (mapScreen[pacmanNextPosition.r][pacmanNextPosition.c] !== symbols.wall) {
         setPacmanPosition(pacmanNextPosition);
