@@ -75,7 +75,9 @@ const Game = () => {
                 className={`gameScreenCell ${
                   cell === symbols.wall
                     ? 'gameWall'
-                    : i === pacmanPosition.r && j === pacmanPosition.c && 'gamePacman'
+                    : i === pacmanPosition.r &&
+                      j === pacmanPosition.c &&
+                      'gamePacman pacman'+ pacmanMovingDirection
                 }`}>
                 {i !== pacmanPosition.r || j !== pacmanPosition.c ? cell : symbols.pacman}
               </div>
