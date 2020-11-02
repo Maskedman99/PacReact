@@ -77,7 +77,7 @@ const Game = () => {
                     ? 'gameWall'
                     : i === pacmanPosition.r && j === pacmanPosition.c && 'gamePacman'
                 }`}>
-                {{r: i, c: j} !== pacmanPosition ? cell : symbols.pacman}
+                {i !== pacmanPosition.r || j !== pacmanPosition.c ? cell : symbols.pacman}
               </div>
             ))}
           </div>
