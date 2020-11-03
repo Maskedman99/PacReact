@@ -22,6 +22,7 @@ const Game = () => {
   const [pacmanPosition, setPacmanPosition] = useState({r: 9, c: 24});
   const [pacmanMovingDirection, setPacmanMovingDirection] = useState('left');
 
+  // --------------- UPDATE PACMAN-MOVING-DIRECTION BASED ON KEY PRESSED ---------------------
   useEffect(() => {
     if (keyPressed === 'w' || keyPressed === 'arrowup') {
       setPacmanMovingDirection('up');
@@ -34,6 +35,7 @@ const Game = () => {
     }
   }, [keyPressed]);
 
+  // ---------------- MOVE PACMAN --------------------
   useEffect(() => {
     const interval = setInterval(() => {
       let pacmanNextPosition = {r: 0, c: 0};
@@ -55,6 +57,7 @@ const Game = () => {
     };
   }, [pacmanPosition, pacmanMovingDirection]);
 
+  //  ---------------- UPDATE MAP AFTER PACMAN EATS DOT ---------------------
   useEffect(() => {
     if (mapScreen[pacmanPosition.r][pacmanPosition.c] === symbols.dot) {
       let x = mapScreen;
@@ -63,6 +66,7 @@ const Game = () => {
     }
   }, [pacmanPosition]);
 
+  // ------------------ MOVE GHOST ---------------------
   useEffect(() => {
     const interval = setInterval(() => {
       let ghostNextPosition = ghostPosition;
