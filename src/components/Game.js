@@ -21,73 +21,86 @@ const Game = () => {
   const [ghostPosition, setGhostPosition] = useState({r: 1, c: 1});
   const [pacmanPosition, setPacmanPosition] = useState({r: 9, c: 24});
   const [pacmanMovingDirection, setPacmanMovingDirection] = useState('left');
+  const [isGamePaused, setIsGamePaused] = useState(false);
 
   // --------------- UPDATE PACMAN-MOVING-DIRECTION BASED ON KEY PRESSED ---------------------
   useEffect(() => {
-    if (keyPressed === 'w' || keyPressed === 'arrowup') {
-      setPacmanMovingDirection('up');
-    } else if (keyPressed === 's' || keyPressed === 'arrowdown') {
-      setPacmanMovingDirection('down');
-    } else if (keyPressed === 'd' || keyPressed === 'arrowright') {
-      setPacmanMovingDirection('right');
-    } else if (keyPressed === 'a' || keyPressed === 'arrowleft') {
-      setPacmanMovingDirection('left');
+    if (!isGamePaused) {
+      if (keyPressed === 'w' || keyPressed === 'arrowup') {
+        setPacmanMovingDirection('up');
+      } else if (keyPressed === 's' || keyPressed === 'arrowdown') {
+        setPacmanMovingDirection('down');
+      } else if (keyPressed === 'd' || keyPressed === 'arrowright') {
+        setPacmanMovingDirection('right');
+      } else if (keyPressed === 'a' || keyPressed === 'arrowleft') {
+        setPacmanMovingDirection('left');
+      } else if (keyPressed === 'escape') {
+        setIsGamePaused(true);
+      }
+    } else if (keyPressed === 'escape') {
+      setIsGamePaused(false);
     }
   }, [keyPressed]);
 
   // ---------------- MOVE PACMAN --------------------
   useEffect(() => {
-    const interval = setInterval(() => {
-      let pacmanNextPosition = {r: 0, c: 0};
-      if (pacmanMovingDirection === 'up') {
-        pacmanNextPosition = {r: pacmanPosition.r - 1, c: pacmanPosition.c};
-      } else if (pacmanMovingDirection === 'down') {
-        pacmanNextPosition = {r: pacmanPosition.r + 1, c: pacmanPosition.c};
-      } else if (pacmanMovingDirection === 'right') {
-        pacmanNextPosition = {r: pacmanPosition.r, c: pacmanPosition.c + 1};
-      } else if (pacmanMovingDirection === 'left') {
-        pacmanNextPosition = {r: pacmanPosition.r, c: pacmanPosition.c - 1};
-      }
-      if (mapScreen[pacmanNextPosition.r][pacmanNextPosition.c] !== symbols.wall) {
-        setPacmanPosition(pacmanNextPosition);
-      }
-    }, 125);
-    return () => {
-      clearInterval(interval);
-    };
-  }, [pacmanPosition, pacmanMovingDirection]);
+    if (!isGamePaused) {
+      const interval = setInterval(() => {
+        let pacmanNextPosition = {r: 0, c: 0};
+        if (pacmanMovingDirection === 'up') {
+          pacmanNextPosition = {r: pacmanPosition.r - 1, c: pacmanPosition.c};
+        } else if (pacmanMovingDirection === 'down') {
+          pacmanNextPosition = {r: pacmanPosition.r + 1, c: pacmanPosition.c};
+        } else if (pacmanMovingDirection === 'right') {
+          pacmanNextPosition = {r: pacmanPosition.r, c: pacmanPosition.c + 1};
+        } else if (pacmanMovingDirection === 'left') {
+          pacmanNextPosition = {r: pacmanPosition.r, c: pacmanPosition.c - 1};
+        }
+        if (mapScreen[pacmanNextPosition.r][pacmanNextPosition.c] !== symbols.wall) {
+          setPacmanPosition(pacmanNextPosition);
+        }
+      }, 125);
+      return () => {
+        clearInterval(interval);
+      };
+    }
+  }, [pacmanPosition, pacmanMovingDirection, isGamePaused]);
 
   //  ---------------- UPDATE MAP AFTER PACMAN EATS DOT ---------------------
   useEffect(() => {
-    if (mapScreen[pacmanPosition.r][pacmanPosition.c] === symbols.dot) {
-      let x = mapScreen;
-      x[pacmanPosition.r][pacmanPosition.c] = symbols.empty;
-      setMapScreen(x);
+    if (!isGamePaused) {
+      if (mapScreen[pacmanPosition.r][pacmanPosition.c] === symbols.dot) {
+        let x = mapScreen;
+        x[pacmanPosition.r][pacmanPosition.c] = symbols.empty;
+        setMapScreen(x);
+      }
     }
-  }, [pacmanPosition]);
+  }, [pacmanPosition, isGamePaused]);
 
   // ------------------ MOVE GHOST ---------------------
   useEffect(() => {
-    const interval = setInterval(() => {
-      let ghostNextPosition = ghostPosition;
-      let ghostRandom = Math.floor(Math.random() * 4);
-      if (ghostRandom === 0) {
-        ghostNextPosition = {r: ghostPosition.r - 1, c: ghostPosition.c};
-      } else if (ghostRandom === 1) {
-        ghostNextPosition = {r: ghostPosition.r + 1, c: ghostPosition.c};
-      } else if (ghostRandom === 2) {
-        ghostNextPosition = {r: ghostPosition.r, c: ghostPosition.c + 1};
-      } else {
-        ghostNextPosition = {r: ghostPosition.r, c: ghostPosition.c - 1};
-      }
-      if (mapScreen[ghostNextPosition.r][ghostNextPosition.c] !== symbols.wall) {
-        setGhostPosition(ghostNextPosition);
-      }
-    }, 125);
-    return () => {
-      clearInterval(interval);
-    };
-  }, [ghostPosition]);
+    if (!isGamePaused) {
+      const interval = setInterval(() => {
+        let ghostNextPosition = ghostPosition;
+        let ghostRandom = Math.floor(Math.random() * 4);
+        if (ghostRandom === 0) {
+          ghostNextPosition = {r: ghostPosition.r - 1, c: ghostPosition.c};
+        } else if (ghostRandom === 1) {
+          ghostNextPosition = {r: ghostPosition.r + 1, c: ghostPosition.c};
+        } else if (ghostRandom === 2) {
+          ghostNextPosition = {r: ghostPosition.r, c: ghostPosition.c + 1};
+        } else {
+          ghostNextPosition = {r: ghostPosition.r, c: ghostPosition.c - 1};
+        }
+        if (mapScreen[ghostNextPosition.r][ghostNextPosition.c] !== symbols.wall) {
+          setGhostPosition(ghostNextPosition);
+        }
+      }, 125);
+      return () => {
+        clearInterval(interval);
+      };
+    }
+  }, [ghostPosition, isGamePaused]);
 
   return (
     <div>
