@@ -1,0 +1,19 @@
+.menuContainer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 1;
+  margin: 24px;
+  padding: 24px;
+  border-radius: 4px;
+  background-color: rgba(75, 75, 75, 0.9);
+}
+.menuTitle {
+  font-weight: bold;
+  font-family: 'pac-font';
+  text-align: center;
+  padding: 12px;
+  font-size: 24px;
+}

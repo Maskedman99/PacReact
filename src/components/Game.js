@@ -2,11 +2,9 @@ import {useState, useEffect} from 'react';
 
 import createInitialMap from '../logic/createInitialMap';
 
-import useKeyPressed from '../hooks/useKeyPressed';
-
 import '../css/Game.css';
 
-const Game = () => {
+const Game = ({isGamePaused, keyPressed}) => {
   const symbols = {
     empty: ' ',
     wall: '█',
@@ -15,13 +13,10 @@ const Game = () => {
     ghost: '9'
   };
 
-  const keyPressed = useKeyPressed();
-
   const [mapScreen, setMapScreen] = useState(createInitialMap(symbols));
   const [ghostPosition, setGhostPosition] = useState({r: 1, c: 1});
   const [pacmanPosition, setPacmanPosition] = useState({r: 9, c: 24});
   const [pacmanMovingDirection, setPacmanMovingDirection] = useState('left');
-  const [isGamePaused, setIsGamePaused] = useState(false);
 
   // --------------- UPDATE PACMAN-MOVING-DIRECTION BASED ON KEY PRESSED ---------------------
   useEffect(() => {
@@ -34,11 +29,7 @@ const Game = () => {
         setPacmanMovingDirection('right');
       } else if (keyPressed === 'a' || keyPressed === 'arrowleft') {
         setPacmanMovingDirection('left');
-      } else if (keyPressed === 'escape') {
-        setIsGamePaused(true);
       }
-    } else if (keyPressed === 'escape') {
-      setIsGamePaused(false);
     }
   }, [keyPressed]);
 
