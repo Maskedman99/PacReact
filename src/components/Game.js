@@ -14,7 +14,7 @@ const Game = ({isGamePaused, keyPressed}) => {
   };
 
   const [mapScreen, setMapScreen] = useState(createInitialMap(symbols));
-  const [ghostPosition, setGhostPosition] = useState({r: 1, c: 1});
+  const [ghostPosition, setGhostPosition] = useState({r1: 1, c1: 1, r2: 18, c2: 48});
   const [pacmanPosition, setPacmanPosition] = useState({r: 9, c: 24});
   const [pacmanMovingDirection, setPacmanMovingDirection] = useState('left');
 
@@ -75,15 +75,38 @@ const Game = ({isGamePaused, keyPressed}) => {
         let ghostNextPosition = ghostPosition;
         let ghostRandom = Math.floor(Math.random() * 4);
         if (ghostRandom === 0) {
-          ghostNextPosition = {r: ghostPosition.r - 1, c: ghostPosition.c};
+          ghostNextPosition = {
+            r1: ghostPosition.r1 - 1,
+            c1: ghostPosition.c1,
+            r2: ghostPosition.r2 + 1,
+            c2: ghostPosition.c2
+          };
         } else if (ghostRandom === 1) {
-          ghostNextPosition = {r: ghostPosition.r + 1, c: ghostPosition.c};
+          ghostNextPosition = {
+            r1: ghostPosition.r1 + 1,
+            c1: ghostPosition.c1,
+            r2: ghostPosition.r2 - 1,
+            c2: ghostPosition.c2
+          };
         } else if (ghostRandom === 2) {
-          ghostNextPosition = {r: ghostPosition.r, c: ghostPosition.c + 1};
+          ghostNextPosition = {
+            r1: ghostPosition.r1,
+            c1: ghostPosition.c1 + 1,
+            r2: ghostPosition.r2,
+            c2: ghostPosition.c2 - 1
+          };
         } else {
-          ghostNextPosition = {r: ghostPosition.r, c: ghostPosition.c - 1};
+          ghostNextPosition = {
+            r1: ghostPosition.r1,
+            c1: ghostPosition.c1 - 1,
+            r2: ghostPosition.r2,
+            c2: ghostPosition.c2 + 1
+          };
         }
-        if (mapScreen[ghostNextPosition.r][ghostNextPosition.c] !== symbols.wall) {
+        if (
+          mapScreen[ghostNextPosition.r1][ghostNextPosition.c1] !== symbols.wall &&
+          mapScreen[ghostNextPosition.r2][ghostNextPosition.c2] !== symbols.wall
+        ) {
           setGhostPosition(ghostNextPosition);
         }
       }, 125);
@@ -99,7 +122,11 @@ const Game = ({isGamePaused, keyPressed}) => {
         {mapScreen.map((row, i) => (
           <div key={i} className="gameScreenRow">
             {row.map((cell, j) =>
-              i === ghostPosition.r && j === ghostPosition.c ? (
+              i === ghostPosition.r1 && j === ghostPosition.c1 ? (
+                <div key={j} className="gameScreenCell gameGhost">
+                  {symbols.ghost}
+                </div>
+              ) : i === ghostPosition.r2 && j === ghostPosition.c2 ? (
                 <div key={j} className="gameScreenCell gameGhost">
                   {symbols.ghost}
                 </div>

@@ -1,18 +1,18 @@
 import '../css/Menu.css';
 
-const Menu = () => {
+const Menu = ({isGameOver}) => {
   return (
     <div className="menuContainer">
       <div className="menuSubcontainer">
-        <div className="menuTitle">paused</div>
-        <div>
+        <div className="menuTitle">{isGameOver ? 'game over' : 'paused'}</div>
+        <div className="menuInstructions">
           Press
           <b>
             <i> space </i>
           </b>
-          to resume the game.
+          to {isGameOver ? 'restart' : 'resume'} the game.
         </div>
-        <div>
+        <div className="menuInstructions">
           Use <b>W</b>, <b>A</b>, <b>S</b>, <b>D</b> or the arrow keys to control the pacman.
         </div>
       </div>
