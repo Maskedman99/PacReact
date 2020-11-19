@@ -1,10 +1,11 @@
 import {useState, useEffect} from 'react';
 
 import createInitialMap from '../logic/createInitialMap';
+import isPacmanOnAGhost from '../logic/isPacmanOnAGhost';
 
 import '../css/Game.css';
 
-const Game = ({isGamePaused, keyPressed}) => {
+const Game = ({isGamePaused, setIsGamePaused, setIsGameOver, keyPressed}) => {
   const symbols = {
     empty: ' ',
     wall: '█',
@@ -47,7 +48,10 @@ const Game = ({isGamePaused, keyPressed}) => {
         } else if (pacmanMovingDirection === 'left') {
           pacmanNextPosition = {r: pacmanPosition.r, c: pacmanPosition.c - 1};
         }
-        if (mapScreen[pacmanNextPosition.r][pacmanNextPosition.c] !== symbols.wall) {
+        if (isPacmanOnAGhost(pacmanNextPosition, ghostPosition)) {
+          setIsGamePaused(true);
+          setIsGameOver(true);
+        } else if (mapScreen[pacmanNextPosition.r][pacmanNextPosition.c] !== symbols.wall) {
           setPacmanPosition(pacmanNextPosition);
         }
       }, 125);
@@ -72,42 +76,27 @@ const Game = ({isGamePaused, keyPressed}) => {
   useEffect(() => {
     if (!isGamePaused) {
       const interval = setInterval(() => {
-        let ghostNextPosition = ghostPosition;
+        let r1 = ghostPosition.r1;
+        let r2 = ghostPosition.r2;
+        let c1 = ghostPosition.c1;
+        let c2 = ghostPosition.c2;
+
         let ghostRandom = Math.floor(Math.random() * 4);
         if (ghostRandom === 0) {
-          ghostNextPosition = {
-            r1: ghostPosition.r1 - 1,
-            c1: ghostPosition.c1,
-            r2: ghostPosition.r2 + 1,
-            c2: ghostPosition.c2
-          };
+          r1 = ghostPosition.r1 - 1;
+          r2 = ghostPosition.r2 + 1;
         } else if (ghostRandom === 1) {
-          ghostNextPosition = {
-            r1: ghostPosition.r1 + 1,
-            c1: ghostPosition.c1,
-            r2: ghostPosition.r2 - 1,
-            c2: ghostPosition.c2
-          };
+          r1 = ghostPosition.r1 + 1;
+          r2 = ghostPosition.r2 - 1;
         } else if (ghostRandom === 2) {
-          ghostNextPosition = {
-            r1: ghostPosition.r1,
-            c1: ghostPosition.c1 + 1,
-            r2: ghostPosition.r2,
-            c2: ghostPosition.c2 - 1
-          };
+          c1 = ghostPosition.c1 + 1;
+          c2 = ghostPosition.c2 - 1;
         } else {
-          ghostNextPosition = {
-            r1: ghostPosition.r1,
-            c1: ghostPosition.c1 - 1,
-            r2: ghostPosition.r2,
-            c2: ghostPosition.c2 + 1
-          };
+          c1 = ghostPosition.c1 - 1;
+          c2 = ghostPosition.c2 + 1;
         }
-        if (
-          mapScreen[ghostNextPosition.r1][ghostNextPosition.c1] !== symbols.wall &&
-          mapScreen[ghostNextPosition.r2][ghostNextPosition.c2] !== symbols.wall
-        ) {
-          setGhostPosition(ghostNextPosition);
+        if (mapScreen[r1][c1] !== symbols.wall && mapScreen[r2][c2] !== symbols.wall) {
+          setGhostPosition({r1, c1, r2, c2});
         }
       }, 125);
       return () => {

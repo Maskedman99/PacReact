@@ -27,7 +27,12 @@ const App = () => {
   return (
     <div className="App">
       <div className="appTitle">pacman</div>
-      <Game isGamePaused={isGamePaused} keyPressed={keyPressed} />
+      <Game
+        isGamePaused={isGamePaused}
+        setIsGamePaused={setIsGamePaused}
+        setIsGameOver={setIsGameOver}
+        keyPressed={keyPressed}
+      />
       {isGamePaused && <Menu isGameOver={isGameOver} />}
     </div>
   );
