@@ -1,7 +1,11 @@
-const isPacmanOnAGhost = (pacmanNextPosition, ghostPosition) => {
-  if (pacmanNextPosition.r === ghostPosition.r1 && pacmanNextPosition.c === ghostPosition.c1) {
+const isPacmanOnAGhost = (pacmanNextPosition, ghostsPosition) => {
+  if (pacmanNextPosition.r === ghostsPosition.r1 && pacmanNextPosition.c === ghostsPosition.c1) {
     return true;
-  } else if (pacmanNextPosition.r === ghostPosition.r2 && pacmanNextPosition.c === ghostPosition.c2) {
+  } else if (pacmanNextPosition.r === ghostsPosition.r2 && pacmanNextPosition.c === ghostsPosition.c2) {
+    return true;
+  } else if (pacmanNextPosition.r === ghostsPosition.r3 && pacmanNextPosition.c === ghostsPosition.c3) {
+    return true;
+  } else if (pacmanNextPosition.r === ghostsPosition.r4 && pacmanNextPosition.c === ghostsPosition.c4) {
     return true;
   } else {
     return false;
